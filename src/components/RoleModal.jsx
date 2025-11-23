@@ -56,37 +56,42 @@ export default function RoleModal({ open, onClose, onSave }) {
     <div onClick={onClose} style={modalBackdropStyle}>
       <div onClick={e => e.stopPropagation()} style={modalContentStyle}>
         <h3>Add New Role</h3>
-        <p style={{ color: "#6b7280", marginBottom: 12 }}>Choose permissions for this role</p>
+        <p style={{ color: "#6b7280", marginBottom: 16 }}>Choose permissions for this role</p>
 
-        <input
-          placeholder="Role name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          placeholder="Description"
-          value={desc}
-          onChange={e => setDesc(e.target.value)}
-          style={inputStyle}
-        />
+        {/* Horizontal layout: Left inputs, right permissions */}
+        <div style={horizontalLayoutStyle}>
+          <div style={leftColumnStyle}>
+            <input
+              placeholder="Role name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="Description"
+              value={desc}
+              onChange={e => setDesc(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
 
-        <div style={{ marginTop: 16 }}>
-          <h4>Permissions</h4>
-          <div style={permissionsGridStyle}>
-            {permissions.map(p => (
-              <label key={p._id} style={permissionLabelStyle(selected.includes(p._id))}>
-                <input type="checkbox" checked={selected.includes(p._id)} onChange={() => toggle(p._id)} />
-                <div>
-                  <div style={{ fontWeight: 700 }}>{p.label || p.name}</div>
-                  <div style={{ fontSize: 12, color: "#6b7280" }}>{p.name}</div>
-                </div>
-              </label>
-            ))}
+          <div style={rightColumnStyle}>
+            <h4 style={{ marginBottom: 8 }}>Permissions</h4>
+            <div style={permissionsGridStyle}>
+              {permissions.map(p => (
+                <label key={p._id} style={permissionLabelStyle(selected.includes(p._id))}>
+                  <input type="checkbox" checked={selected.includes(p._id)} onChange={() => toggle(p._id)} />
+                  <div>
+                    <div style={{ fontWeight: 700 }}>{p.label || p.name}</div>
+                    <div style={{ fontSize: 12, color: "#6b7280" }}>{p.name}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 18 }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 20 }}>
           <button onClick={onClose} style={cancelButtonStyle}>Cancel</button>
           <button onClick={handleSave} disabled={loading} style={saveButtonStyle}>
             {loading ? "Saving..." : "Save Role"}
@@ -99,24 +104,68 @@ export default function RoleModal({ open, onClose, onSave }) {
 
 // ----- Styles -----
 const modalBackdropStyle = {
-  position: "fixed", inset: 0, backgroundColor: "rgba(2,6,23,0.6)",
-  display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1200
+  position: "fixed", inset: 0,
+  backgroundColor: "rgba(2,6,23,0.6)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1200
 };
 
 const modalContentStyle = {
-  width: "min(92%, 500px)", background: "#fff", borderRadius: 12, padding: 20,
-  maxHeight: "88vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(2,6,23,0.4)"
+  width: "min(95%, 850px)",
+  display: "flex",
+  flexDirection: "column",
+  background: "#fff",
+  borderRadius: 12,
+  padding: 24,
+  maxHeight: "88vh",
+  overflowY: "auto",
+  boxShadow: "0 20px 60px rgba(2,6,23,0.4)"
 };
 
-const inputStyle = { width: "100%", padding: 12, borderRadius: 8, border: "1px solid #e6e8eb", marginBottom: 12 };
+const horizontalLayoutStyle = {
+  display: "flex",
+  gap: 24,
+  alignItems: "flex-start",
+  marginTop: 12
+};
 
-const permissionsGridStyle = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 };
+const leftColumnStyle = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  gap: 12
+};
+
+const rightColumnStyle = {
+  flex: 2
+};
+
+const inputStyle = {
+  padding: 12,
+  borderRadius: 8,
+  border: "1px solid #e6e8eb"
+};
+
+const permissionsGridStyle = {
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr",
+  gap: 10,
+  maxHeight: "300px",
+  overflowY: "auto"
+};
 
 const permissionLabelStyle = (selected) => ({
-  display: "flex", gap: 10, alignItems: "center", padding: 10,
-  borderRadius: 8, border: "1px solid #eef2f7",
-  background: selected ? "#eef2ff" : "#fff", cursor: "pointer"
+  display: "flex",
+  gap: 10,
+  alignItems: "center",
+  padding: 10,
+  borderRadius: 8,
+  border: "1px solid #eef2f7",
+  background: selected ? "#eef2ff" : "#fff",
+  cursor: "pointer"
 });
 
-const cancelButtonStyle = { padding: "8px 12px", borderRadius: 8, border: "1px solid #e6e8eb" };
-const saveButtonStyle = { padding: "8px 12px", borderRadius: 8, border: "none", background: "#2563eb", color: "#fff" };
+const cancelButtonStyle = { padding: "8px 16px", borderRadius: 8, border: "1px solid #e6e8eb" };
+const saveButtonStyle = { padding: "8px 16px", borderRadius: 8, border: "none", background: "#2563eb", color: "#fff" };

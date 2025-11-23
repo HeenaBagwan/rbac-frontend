@@ -16,12 +16,22 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await api.post("/auth/login", { email, password });
-      // API returns { user, token }
+
+      // Save token in localStorage for future API requests
+      localStorage.setItem("token", res.data.token);
+
+      // Save user in Redux store
       dispatch(setAuth(res.data));
+
+      // Navigate to dashboard
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Login failed");
+      alert(
+        err.response?.data?.message ||
+        err.message ||
+        "Login failed. Check API URL, CORS, and backend connectivity."
+      );
     } finally {
       setLoading(false);
     }
@@ -53,21 +63,41 @@ export default function LoginPage() {
 
         <div style={{ marginTop: 18 }}>
           <label style={{ display: "block", fontWeight: 700, marginBottom: 6 }}>Email Address</label>
-          <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-            style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid #e6e8eb" }} />
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid #e6e8eb" }}
+          />
         </div>
 
         <div style={{ marginTop: 12 }}>
           <label style={{ display: "block", fontWeight: 700, marginBottom: 6 }}>Password</label>
-          <input type="password" required value={password} onChange={e => setPassword(e.target.value)}
-            style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid #e6e8eb" }} />
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            style={{ width: "100%", padding: 12, borderRadius: 8, border: "1px solid #e6e8eb" }}
+          />
         </div>
 
-        <button type="submit" disabled={loading}
+        <button
+          type="submit"
+          disabled={loading}
           style={{
-            width: "100%", padding: 12, marginTop: 16, borderRadius: 10, border: "none",
-            background: loading ? "#94a3b8" : "#6366f1", color: "#fff", fontWeight: 700, cursor: "pointer"
-          }}>
+            width: "100%",
+            padding: 12,
+            marginTop: 16,
+            borderRadius: 10,
+            border: "none",
+            background: loading ? "#94a3b8" : "#6366f1",
+            color: "#fff",
+            fontWeight: 700,
+            cursor: "pointer"
+          }}
+        >
           {loading ? "Signing in..." : "Sign In"}
         </button>
 
