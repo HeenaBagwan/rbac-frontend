@@ -35,9 +35,8 @@ frontend/
 
 ## Environment Variables
 
-Create a `.env` file in the frontend root (if needed):
+VITE_API_URL=https://rbac-backend-chi.vercel.app/api
 
-VITE_BACKEND_URL=https://your-backend-vercel-url.vercel.app/api
 
 ## Scripts
 
